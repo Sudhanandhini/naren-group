@@ -1,17 +1,12 @@
 import { useState } from 'react'
-import emailjs from '@emailjs/browser'
 import { WA_NUMBER } from '../data/site'
-
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 export default function EnquiryForm() {
   const [error, setError] = useState('')
-  const [sending, setSending] = useState(false)
+  const [status, setStatus] = useState('')
   const enc = (v) => encodeURIComponent((v || '-').trim() || '-')
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
     const f = e.target.elements
     const name = f.name.value.trim()
@@ -25,21 +20,29 @@ export default function EnquiryForm() {
       phone,
       location: f.location.value.trim() || '-',
       type: f.type.value,
-      length: f.length.value.trim() || '-',
+      length: f.runLength.value.trim() || '-',
       message: f.message.value.trim() || '-',
-      to_email: 'support@sunsys.in',
     }
 
-    if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
-      setSending(true)
-      try {
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, fields, { publicKey: EMAILJS_PUBLIC_KEY })
-      } catch (err) {
-        console.error('EmailJS send failed', err)
-      } finally {
-        setSending(false)
-      }
-    }
+    // Fire-and-forget: awaiting here would delay window.open past the click's
+    // user-gesture window and get it blocked as a popup by most browsers.
+    const endpoint = `${import.meta.env.BASE_URL}api/send-enquiry.php`
+    console.log('[enquiry] sending to', endpoint, fields)
+    setStatus('Sending email…')
+    fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
+    })
+      .then(async (res) => {
+        const body = await res.text()
+        console.log('[enquiry] response', res.status, body)
+        setStatus(res.ok ? 'Email sent ✓' : `Email failed (${res.status}): ${body}`)
+      })
+      .catch((err) => {
+        console.error('[enquiry] fetch failed', err)
+        setStatus(`Email request failed: ${err.message}`)
+      })
 
     const msg =
       `New enquiry — Naren Groups%0A%0A` +
@@ -72,10 +75,11 @@ export default function EnquiryForm() {
           <option>Other</option>
         </select>
       </label>
-      <label className="field"><span>Approx. running feet (optional)</span><input type="text" name="length" placeholder="e.g. 500 ft" /></label>
+      <label className="field"><span>Approx. running feet (optional)</span><input type="text" name="runLength" placeholder="e.g. 500 ft" /></label>
       <label className="field"><span>Message</span><textarea name="message" rows="3" placeholder="Tell us about your requirement" /></label>
-      <button type="submit" className="btn btn--red btn--block" disabled={sending}>{sending ? 'Sending…' : 'Send on WhatsApp'}</button>
+      <button type="submit" className="btn btn--red btn--block">Submit</button>
       <p className="form__error" role="alert">{error}</p>
+      {status && <p style={{ marginTop: '.5rem', fontSize: '.85rem', color: '#ccc' }}>{status}</p>}
     </form>
   )
 }
