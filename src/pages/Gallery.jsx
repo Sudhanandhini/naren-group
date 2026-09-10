@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import PageHero from '../components/PageHero'
 import useReveal from '../components/useReveal'
 import { GALLERY, VIDEOS, YT_CHANNEL } from '../data/site'
+import { asset } from '../utils/asset'
 
 function Lightbox({ index, onClose, onPrev, onNext }) {
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function Gallery() {
   return (
     <main>
       <PageHero
-        bg="/assets/gallery-1.jpg"
+        bg={asset('/assets/gallery-1.jpg')}
         crumb="Gallery"
         title="Our work, up close —"
         accent="boundaries that last."

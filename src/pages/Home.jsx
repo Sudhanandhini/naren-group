@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import EnquiryForm from '../components/EnquiryForm'
+import VideoPopup from '../components/VideoPopup'
 import {
   HERO_SLIDES, STATS, GALLERY, CLIENTS, VIDEOS,
-  ADVANTAGES, USE_CASES, PROCESS, WA_LINK, YT_CHANNEL,
+  PRODUCTS, PROCESS, WA_LINK, YT_CHANNEL, INFRA_VIDEO_POPUP,
 } from '../data/site'
+import { asset } from '../utils/asset'
 
 /* ---------- Count-up number ---------- */
 function Counter({ target, comma }) {
@@ -146,138 +148,11 @@ function VideoTile({ id }) {
   )
 }
 
-/* ---------- Case studies sticky stack ---------- */
-const CASE_STUDIES = [
-  {
-    n: '01', tag: 'Peresandra Unit', title: 'Precision casting at scale',
-    company: 'Chikkaballapur Facility', category: 'Manufacturing',
-    img: '/assets/gallery-3.jpg',
-    challenge: 'Large layout developments needed thousands of running feet of boundary, fast, without compromising strength.',
-    solution: 'We cast panels and reinforced posts in controlled batches and cured them up to 25 days for full load-bearing strength.',
-    results: ['Thousands of ft cast per cycle', 'Up to 25-day controlled curing', 'Consistent panel finish'],
-  },
-  {
-    n: '02', tag: 'Varthur Unit', title: 'Rapid on-site installation',
-    company: 'Whitefield Facility', category: 'Installation',
-    img: '/assets/gallery-7.jpg',
-    challenge: 'Builders around Bangalore needed secured boundaries in days, not the months brick masonry demands.',
-    solution: 'Trained crews delivered and assembled stacked-panel walls on site with anchor-bolt fixing and optional barbed-wire tops.',
-    results: ['Boundary raised in days', 'Minimal on-site labour', 'Clean, uniform finish'],
-  },
-  {
-    n: '03', tag: 'Dommasandra Unit', title: 'Serving Bangalore & Hosur',
-    company: 'Sarjapura Facility', category: 'Logistics',
-    img: '/assets/gallery-4.jpg',
-    challenge: 'Projects spread across Karnataka and Tamil Nadu needed dependable transport and timely delivery.',
-    solution: 'Three strategically located units keep material close to site, cutting transport time and protecting delivery schedules.',
-    results: ['3 units across the region', '2 states served', 'On-time delivery'],
-  },
-  {
-    n: '04', tag: 'Trusted by leaders', title: 'Boundaries for major brands',
-    company: 'Foxconn · Sobha · Shahi', category: 'Enterprise',
-    img: '/assets/gallery-9.jpg',
-    challenge: 'Large enterprises and institutions needed secure, litigation-proof boundaries around critical property.',
-    solution: 'End-to-end delivery — manufacturing, transport, installation and finishing — under one accountable team.',
-    results: ['6,000+ projects completed', 'Enterprise-grade security', 'Single point of accountability'],
-  },
-]
-
-function CaseStudies() {
-  const stackRef = useRef(null)
-  const [current, setCurrent] = useState('01')
-
-  useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const stack = stackRef.current
-    if (!stack || !('IntersectionObserver' in window)) return
-    const cards = Array.from(stack.querySelectorAll('[data-cs-card]'))
-    const csEl = document.querySelector('.case-studies')
-    const stickyTop = parseFloat(getComputedStyle(csEl).getPropertyValue('--cs-card-top')) || 96
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const pinned = entry.boundingClientRect.top <= stickyTop + 1
-        entry.target.classList.toggle('is-pinned', pinned && entry.isIntersecting)
-      })
-      let active = 0
-      cards.forEach((c, idx) => { if (c.classList.contains('is-pinned')) active = idx })
-      setCurrent(String(active + 1).padStart(2, '0'))
-    }, { threshold: [0, 1], rootMargin: '0px' })
-    cards.forEach((c) => io.observe(c))
-    return () => io.disconnect()
-  }, [])
-
-  return (
-    <section className="case-studies" aria-label="Infrastructure">
-      <div className="case-studies__container">
-        <header className="case-studies__header">
-          <span className="eyebrow">Infrastructure</span>
-          <h2 className="case-studies__title">
-            Three manufacturing units, one accountable team — engineered strength delivered on time.
-          </h2>
-          <p className="case-studies__lede">
-            A look at how Naren Groups casts, transports and installs precast compound walls across
-            Karnataka and Tamil Nadu.
-          </p>
-        </header>
-
-        <div className="case-studies__stack" ref={stackRef} data-cs-stack>
-          <div className="case-studies__progress" aria-hidden="true">
-            <div className="case-studies__progress-inner">
-              <span className="case-studies__progress-current">{current}</span>
-              <span className="case-studies__progress-divider">/</span>
-              <span className="case-studies__progress-total">04</span>
-            </div>
-          </div>
-
-          {CASE_STUDIES.map((c) => (
-            <article className="case-study-card" data-cs-card key={c.n}>
-              <div className="case-study-card__inner">
-                <div className="case-study-card__media">
-                  <img src={c.img} alt={c.title} />
-                  <span className="case-study-card__category-tag">{c.tag}</span>
-                </div>
-                <div className="case-study-card__content">
-                  <span className="case-study-card__number">{c.n}</span>
-                  <h3 className="case-study-card__title">{c.title}</h3>
-                  <div className="case-study-card__meta">
-                    <span className="case-study-card__company">{c.company}</span>
-                    <span className="case-study-card__category">{c.category}</span>
-                  </div>
-                  <div className="case-study-card__block">
-                    <h4>Challenge</h4><p>{c.challenge}</p>
-                  </div>
-                  <div className="case-study-card__block">
-                    <h4>Solution</h4><p>{c.solution}</p>
-                  </div>
-                  <div className="case-study-card__results">
-                    <h4>Results</h4>
-                    <ul>
-                      {c.results.map((r) => (
-                        <li key={r}><span className="check" aria-hidden="true">✓</span>{r}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <Link to="/product" className="case-study-card__cta">
-                    View our product
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* ---------- Reveal-on-scroll (home sections) ---------- */
 function useHomeReveal() {
   useEffect(() => {
     const selectors = [
-      '.about__text', '.about__side', '.product__head', '.product__grid',
+      '.about__text', '.about__side', '.product__head', '.product__grid', '.product-item',
       '.usecases', '.tl', '.gallery__item', '.clients .wrap', '.clients__showcase',
       '.videos__grid', '.contact__intro', '.contact__form-wrap', '.stat',
     ]
@@ -301,12 +176,18 @@ export default function Home() {
   useHomeReveal()
   const clientCard = ({ file, name }) => (
     <div className="logo-card" key={file}>
-      <img loading="lazy" src={`/assets/logo-${file}.png`} alt={name} title={name} />
+      <img loading="lazy" src={asset(`/assets/logo-${file}.png`)} alt={name} title={name} />
     </div>
   )
 
   return (
     <main>
+      <VideoPopup
+        videoId={INFRA_VIDEO_POPUP.videoId}
+        title={INFRA_VIDEO_POPUP.title}
+        delaySeconds={INFRA_VIDEO_POPUP.delaySeconds}
+      />
+
       <Hero />
 
       {/* STATS */}
@@ -323,8 +204,6 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      <CaseStudies />
 
       {/* ABOUT */}
       <section id="about" className="section about">
@@ -351,7 +230,7 @@ export default function Home() {
             </div>
           </div>
           <aside className="about__side">
-            <img src="/assets/about.jpg" alt="Naren Groups precast compound wall signboard" className="about__img" />
+            <img src={asset('/assets/about.jpg')} alt="Naren Groups precast compound wall signboard" className="about__img" />
             <div className="about__badge">
               <span className="about__badge-num">GST</span>
               <span className="about__badge-txt">29AQCPK0542M2ZP<br /><small>Registered &amp; verified</small></span>
@@ -360,40 +239,50 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PRODUCT */}
+      {/* PRODUCTS */}
       <section id="product" className="section product">
         <div className="wrap">
           <div className="product__head">
-            <span className="eyebrow">Our Product</span>
-            <h2 className="h2">One product, done exceptionally well —<br /><span className="accent">the precast compound wall.</span></h2>
+            <span className="eyebrow">Our Products</span>
+            <h2 className="h2">Two products, done exceptionally well —<br /><span className="accent">the precast wall and the precast shed.</span></h2>
             <p className="product__lead">
-              A ready-made precast compound wall is a system of factory-cast concrete slab panels
-              stacked between reinforced vertical posts. It replaces slow brick-and-mortar boundaries
-              with a stronger, cleaner, quicker alternative — assembled on site in a fraction of the time.
+              Factory-cast precast panels, engineered into a compound wall or a ready-made shed —
+              a stronger, cleaner, quicker alternative to slow brick-and-mortar construction,
+              assembled on site in a fraction of the time.
             </p>
           </div>
-          <div className="product__grid">
-            <figure className="product__visual">
-              <img src="/assets/product.jpg" alt="Grey precast compound wall panels stacked between posts" />
-              <figcaption>Standard stacked-panel precast wall</figcaption>
-            </figure>
-            <div className="advantages">
-              <h3 className="advantages__title">Why precast beats brick</h3>
-              <div className="advantages__grid">
-                {ADVANTAGES.map((a) => (
-                  <div className="adv" key={a.title}>
-                    <span className="adv__ico">✓</span>
-                    <div><b>{a.title}</b><p>{a.text}</p></div>
+
+          {PRODUCTS.map((p, idx) => (
+            <div className="product-item" key={p.id} style={{ marginTop: idx === 0 ? 0 : '4rem' }}>
+              <div className="product__grid">
+                <figure className="product__visual">
+                  <img src={p.image} alt={p.imageAlt} />
+                  <figcaption>{p.caption}</figcaption>
+                </figure>
+                <div className="advantages">
+                  <span className="eyebrow">{p.eyebrow}</span>
+                  <h3 className="advantages__title">{p.name}</h3>
+                  <div className="advantages__grid">
+                    {p.advantages.map((a) => (
+                      <div className="adv" key={a.title}>
+                        <span className="adv__ico">✓</span>
+                        <div><b>{a.title}</b><p>{a.text}</p></div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              </div>
+              <div className="usecases">
+                <span className="usecases__label">{p.useCasesLabel}</span>
+                <div className="usecases__row">
+                  {p.useCases.map((u) => <span className="chip" key={u}>{u}</span>)}
+                </div>
               </div>
             </div>
-          </div>
-          <div className="usecases">
-            <span className="usecases__label">Built for every kind of boundary</span>
-            <div className="usecases__row">
-              {USE_CASES.map((u) => <span className="chip" key={u}>{u}</span>)}
-            </div>
+          ))}
+
+          <div style={{ marginTop: '2.4rem' }}>
+            <Link to="/product" className="btn btn--red">View full product details</Link>
           </div>
         </div>
       </section>
@@ -447,7 +336,7 @@ export default function Home() {
           <div className="marquee__track">{[...CLIENTS].reverse().map(clientCard)}{[...CLIENTS].reverse().map(clientCard)}</div>
         </div>
         <div className="wrap clients__showcase">
-          <img loading="lazy" src="/assets/clients-showcase.jpg" alt="Grid of Naren Groups clients with project acreage" />
+          <img loading="lazy" src={asset('/assets/clients-showcase.jpg')} alt="Grid of Naren Groups clients with project acreage" />
         </div>
       </section>
 

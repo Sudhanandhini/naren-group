@@ -85,7 +85,10 @@ ul,ol{ list-style:none; }
 .eyebrow--light{ color:var(--red); }
 .eyebrow--light::before{ background:var(--red); }
 
-.section{ padding:clamp(64px,9vw,120px) 0; }
+.section{ 
+  padding:60px;
+  /* padding:clamp(64px,9vw,120px) 0; */
+ }
 .section--dark{ background:var(--ink); color:var(--concrete); }
 .section--soft{ background:var(--concrete); }
 .section__intro{ max-width:80ch; color:var(--steel); margin-top:.8rem; font-size:1.05rem; }
@@ -1068,8 +1071,9 @@ ol.timeline.rv{ opacity:1; transform:none; transition:none; }
 
 /* --- Page hero: layered precast-seam banner --- */
 .page-hero{
-  position:relative; overflow:hidden; background:var(--ink-2); color:#fff;
-  padding: clamp(120px,16vw,190px) 0 clamp(56px,8vw,90px);
+  position:relative; overflow:hidden; background:#00000029; color:#fff;
+  padding: 50px;
+  /* padding: clamp(120px,16vw,190px) 0 clamp(56px,8vw,90px); */
 }
 .page-hero__bg{ position:absolute; inset:0; background-size:cover; background-position:center; opacity:.28; transform:scale(1.08); animation:phZoom 12s ease forwards; }
 @keyframes phZoom{ to{ transform:scale(1); } }
@@ -1156,6 +1160,24 @@ ol.timeline.rv{ opacity:1; transform:none; transition:none; }
 .yt-strip__thumb:hover .yt-strip__play span{ transform:scale(1.08); }
 .yt-strip__play span::after{ content:""; border-left:22px solid #fff; border-top:14px solid transparent; border-bottom:14px solid transparent; margin-left:5px; }
 .yt-strip__body{ padding:clamp(1.6rem,3vw,2.6rem); align-self:center; }
+
+/* --- Video popup (home) --- */
+.video-popup{ position:fixed; inset:0; z-index:300; background:rgba(9,10,11,.82);
+  display:grid; place-items:center; padding:20px; animation:popupFade .25s ease; }
+.video-popup__box{ width:min(880px,100%); background:var(--ink-2); border-radius:10px;
+  overflow:hidden; box-shadow:var(--shadow); animation:popupIn .3s ease; }
+.video-popup__head{ display:flex; align-items:center; justify-content:space-between;
+  padding:.9rem 1.2rem; }
+.video-popup__head h3{ color:#fff; font-size:1.05rem; font-weight:600; margin:0; }
+.video-popup__x{ background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25);
+  color:#fff; width:36px; height:36px; border-radius:50%; display:grid; place-items:center;
+  cursor:pointer; font-size:1.25rem; line-height:1; transition:.2s; }
+.video-popup__x:hover{ background:var(--red); border-color:var(--red); }
+.video-popup__frame{ position:relative; aspect-ratio:16/9; background:#000; }
+.video-popup__frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+@keyframes popupFade{ from{ opacity:0; } to{ opacity:1; } }
+@keyframes popupIn{ from{ opacity:0; transform:scale(.96) translateY(10px); } to{ opacity:1; transform:none; } }
 
 /* --- keyframes reused --- */
 @keyframes slabIn{ from{ opacity:0; transform:scaleX(.4); } to{ opacity:1; transform:scaleX(1); } }

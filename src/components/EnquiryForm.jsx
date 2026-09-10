@@ -1,11 +1,17 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 import { WA_NUMBER } from '../data/site'
+
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 
 export default function EnquiryForm() {
   const [error, setError] = useState('')
+  const [sending, setSending] = useState(false)
   const enc = (v) => encodeURIComponent((v || '-').trim() || '-')
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     const f = e.target.elements
     const name = f.name.value.trim()
@@ -13,14 +19,36 @@ export default function EnquiryForm() {
     if (!name) { setError('Please enter your name.'); f.name.focus(); return }
     if (!/^[0-9+\s-]{7,15}$/.test(phone)) { setError('Please enter a valid phone number.'); f.phone.focus(); return }
     setError('')
+
+    const fields = {
+      name,
+      phone,
+      location: f.location.value.trim() || '-',
+      type: f.type.value,
+      length: f.length.value.trim() || '-',
+      message: f.message.value.trim() || '-',
+      to_email: 'support@sunsys.in',
+    }
+
+    if (EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY) {
+      setSending(true)
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, fields, { publicKey: EMAILJS_PUBLIC_KEY })
+      } catch (err) {
+        console.error('EmailJS send failed', err)
+      } finally {
+        setSending(false)
+      }
+    }
+
     const msg =
       `New enquiry — Naren Groups%0A%0A` +
-      `Name: ${enc(name)}%0A` +
-      `Phone: ${enc(phone)}%0A` +
-      `Location: ${enc(f.location.value)}%0A` +
-      `Project type: ${enc(f.type.value)}%0A` +
-      `Length: ${enc(f.length.value)}%0A` +
-      `Message: ${enc(f.message.value)}`
+      `Name: ${enc(fields.name)}%0A` +
+      `Phone: ${enc(fields.phone)}%0A` +
+      `Location: ${enc(fields.location)}%0A` +
+      `Project type: ${enc(fields.type)}%0A` +
+      `Length: ${enc(fields.length)}%0A` +
+      `Message: ${enc(fields.message)}`
     window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank', 'noopener')
   }
 
@@ -46,7 +74,7 @@ export default function EnquiryForm() {
       </label>
       <label className="field"><span>Approx. running feet (optional)</span><input type="text" name="length" placeholder="e.g. 500 ft" /></label>
       <label className="field"><span>Message</span><textarea name="message" rows="3" placeholder="Tell us about your requirement" /></label>
-      <button type="submit" className="btn btn--red btn--block">Send on WhatsApp</button>
+      <button type="submit" className="btn btn--red btn--block" disabled={sending}>{sending ? 'Sending…' : 'Send on WhatsApp'}</button>
       <p className="form__error" role="alert">{error}</p>
     </form>
   )

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { CONTACT, YT_CHANNEL, NAV } from '../data/site'
+import { asset } from '../utils/asset'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -8,7 +9,7 @@ export default function Footer() {
       <div className="wrap footer__grid">
         <div className="footer__brand">
           <Link to="/" className="brand brand--footer">
-            <img src="/assets/logo-footer.png" alt="" className="brand__mark" />
+            <img src={asset('/assets/logo-footer.png')} alt="" className="brand__mark" />
             <span className="brand__word"><b>Naren</b><em>groups</em></span>
           </Link>
           <p className="footer__tag">

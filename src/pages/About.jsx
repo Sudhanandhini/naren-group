@@ -4,6 +4,7 @@ import useReveal from '../components/useReveal'
 import AnimatedCounter from '../components/AnimatedCounter'
 import { handleTilt, resetTilt } from '../components/tilt'
 import { CONTACT, STATS, WA_LINK } from '../data/site'
+import { asset } from '../utils/asset'
 
 const VALUES = [
   { ico: '◈', title: 'Our Vision', text: "To be South India's most dependable name in precast boundary solutions — securing today, safeguarding tomorrow." },
@@ -25,7 +26,7 @@ export default function About() {
   return (
     <main>
       <PageHero
-        bg="/assets/about.jpg"
+        bg={asset('/assets/about.jpg')}
         crumb="About"
         title="Building stronger boundaries,"
         accent="building better spaces."
@@ -60,7 +61,7 @@ export default function About() {
           <aside className="about__side rv rv-2 tilt" onMouseMove={handleTilt} onMouseLeave={resetTilt}>
             <span className="deco-orb deco-orb--a" aria-hidden="true" />
             <span className="deco-orb deco-orb--b" aria-hidden="true" />
-            <img src="/assets/clients-showcase.jpg" alt="Naren Groups client project grid" className="about__img" />
+            <img src={asset('/assets/clients-showcase.jpg')} alt="Naren Groups client project grid" className="about__img" />
             <div className="about__badge">
               <span className="about__badge-num">GST</span>
               <span className="about__badge-txt">{CONTACT.gst}<br /><small>Registered &amp; verified</small></span>
@@ -167,7 +168,26 @@ export default function About() {
               achieve the required strength and durability before installation. From casting and transport
               to installation and finishing, we deliver a complete, hassle-free solution.
             </p>
-            <ul className="grid gap-3">
+            {/* <ul className="grid gap-3">
+              {['Premium-quality raw materials', 'Scientifically controlled curing', 'Trained installation crews', 'End-to-end site execution'].map((t) => (
+                <li key={t} className="flex items-center gap-3 text-concrete">
+                  <span className="grid place-items-center w-6 h-6 rounded-full bg-red text-white text-xs font-bold">✓</span>
+                  {t}
+                </li>
+              ))}
+            </ul> */}
+          </div>
+
+          {/* animated stacked-panel motif */}
+          <div className="rv rv-2 spec-wall bg-[#1c1d20] p-8">
+            {/* <div className="spec-panel">
+              {[0, 1, 2, 3, 4, 5].map((k) => (
+                <div key={k} className="spec-panel__slab" style={{ animationDelay: `${k * 0.09}s` }} />
+              ))}
+            </div>
+            <div className="spec-wall__post" style={{ left: 0 }} />
+            <div className="spec-wall__post" style={{ right: 0 }} /> */}
+                  <ul className="grid gap-3">
               {['Premium-quality raw materials', 'Scientifically controlled curing', 'Trained installation crews', 'End-to-end site execution'].map((t) => (
                 <li key={t} className="flex items-center gap-3 text-concrete">
                   <span className="grid place-items-center w-6 h-6 rounded-full bg-red text-white text-xs font-bold">✓</span>
@@ -175,17 +195,6 @@ export default function About() {
                 </li>
               ))}
             </ul>
-          </div>
-
-          {/* animated stacked-panel motif */}
-          <div className="rv rv-2 spec-wall bg-[#1c1d20] p-8">
-            <div className="spec-panel">
-              {[0, 1, 2, 3, 4, 5].map((k) => (
-                <div key={k} className="spec-panel__slab" style={{ animationDelay: `${k * 0.09}s` }} />
-              ))}
-            </div>
-            <div className="spec-wall__post" style={{ left: 0 }} />
-            <div className="spec-wall__post" style={{ right: 0 }} />
           </div>
         </div>
       </section>

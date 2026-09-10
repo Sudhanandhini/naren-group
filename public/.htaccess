@@ -1,10 +1,10 @@
-# Serve the SPA: send all non-file requests to index.html so
-# /about, /product, /gallery, /contact work on direct load & refresh.
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
-</IfModule>
+Options -MultiViews
+
+RewriteEngine On
+RewriteBase /naren/
+
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+RewriteRule ^ index.html [L]

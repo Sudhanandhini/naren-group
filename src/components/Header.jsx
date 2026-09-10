@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { NAV } from '../data/site'
+import { asset } from '../utils/asset'
 
 export default function Header() {
   const [solid, setSolid] = useState(false)
@@ -17,7 +18,7 @@ export default function Header() {
     <header className={`header ${solid ? 'is-solid' : ''}`}>
       <div className="header__inner">
         <Link to="/" className="brand" aria-label="Naren Groups home" onClick={() => setOpen(false)}>
-          <img src="/assets/logo.png" alt="" className="brand__mark" />
+          <img src={asset('/assets/logo.png')} alt="" className="brand__mark" />
           <span className="brand__word"><b>Naren</b><em>groups</em></span>
         </Link>
 

@@ -2,6 +2,7 @@ import PageHero from '../components/PageHero'
 import useReveal from '../components/useReveal'
 import EnquiryForm from '../components/EnquiryForm'
 import { CONTACT, WA_LINK } from '../data/site'
+import { asset } from '../utils/asset'
 
 export default function Contact() {
   useReveal('contact')
@@ -9,7 +10,7 @@ export default function Contact() {
   return (
     <main>
       <PageHero
-        bg="/assets/gallery-9.jpg"
+        bg={asset('/assets/gallery-9.jpg')}
         crumb="Contact"
         title="Let's build a stronger"
         accent="boundary for your property."
