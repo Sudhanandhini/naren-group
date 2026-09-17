@@ -78,11 +78,10 @@ export const CLIENTS = [
   { file: 'shahi', name: 'Shahi Exports' },
   { file: 'transcend', name: 'Transcend Group of Institutions' },
   { file: 'sapthagiri', name: 'Sapthagiri College of Engineering' },
+  { file: 'sapthagiri-nps', name: 'Sapthagiri NPS University' },
   { file: 'prerana', name: 'Prerana Hospital' },
   { file: 'samruddhi', name: 'Samruddhi Ventures' },
-  { file: 'govt', name: 'Govt. Science Centre, Gauribidanur' },
   { file: 'avantbkg', name: 'Avant BKG Hospitals' },
-  { file: 'rbd', name: 'RBD Realty' },
   { file: 'v2holdings', name: 'V2 Holdings' },
   { file: 'dps', name: 'Delhi Public School' },
   { file: 'nps', name: 'National Public School' },
@@ -108,11 +107,11 @@ export const USE_CASES = [
 ]
 
 export const SHED_ADVANTAGES = [
-  { title: 'Fast erection', text: 'Walls and roof go up on a concrete base in days, not weeks.' },
-  { title: 'Durable structure', text: 'Precast panels and bolted steel trusses built for years of sun and rain.' },
+  { title: 'Fast erection', text: 'The four-side wall structure goes up in days, not weeks.' },
+  { title: 'Durable structure', text: 'Precast panels built for years of sun and rain.' },
   { title: 'Cost-effective', text: 'No brick, no plaster, no long masonry timeline — lower cost per sq ft.' },
   { title: 'Naturally ventilated', text: 'Wave-cut panel vents keep the interior cool without extra fittings.' },
-  { title: 'Flexible sizing', text: 'Built to the length, width and roof span your site needs.' },
+  { title: 'Flexible sizing', text: 'Built to the length and width your site needs.' },
   { title: 'Multi-purpose use', text: 'Suited to storage, site offices, labour quarters and farm sheds alike.' },
 ]
 
@@ -127,9 +126,9 @@ export const SHED_USE_CASES = [
 
 export const PROCESS = [
   { n: '01', title: 'Site visit & quote', text: 'We measure your site, understand the terrain and share a clear, itemised quotation.' },
-  { n: '02', title: 'Precision casting', text: 'Panels, posts and trusses are cast/fabricated at our nearest unit and cured up to 25 days for full strength.' },
+  { n: '02', title: 'Precision casting', text: 'Panels and posts are cast at our nearest unit and cured up to 25 days for full strength.' },
   { n: '03', title: 'Transport & install', text: 'We deliver and assemble on site with trained crews — fast, clean and safe.' },
-  { n: '04', title: 'Finish & handover', text: 'Optional painting, doors, windows and barbed-wire top, final checks, and handover.' },
+  { n: '04', title: 'Proper finishing', text: 'Cement packing one pillars and slabs will be done and 2 inch rod will be provided for barbed wire fencing.' },
 ]
 
 export const PRODUCTS = [
@@ -148,7 +147,7 @@ export const PRODUCTS = [
     buildSteps: [
       ['Reinforced posts', 'Cast with steel reinforcement for structural strength and a secure fixing point.'],
       ['Stacked slab panels', 'Factory-cast, uniform panels that stack cleanly between posts.'],
-      ['Optional finishing', 'Painting and a barbed-wire top for added security and a professional look.'],
+      ['Proper finishing', 'Cement packing one pillars and slabs will be done and 2 inch rod will be provided for barbed wire fencing.'],
     ],
     advantagesTitle: 'Why precast beats brick',
     advantages: ADVANTAGES,
@@ -162,15 +161,15 @@ export const PRODUCTS = [
     headline: 'The precast ready-made shed.',
     image: asset('/assets/shed-12.jpg'),
     imageAlt: 'Precast shed with steel roof canopy and mesh windows on a farm plot',
-    caption: 'Steel-roof precast shed with ventilated wall panels',
+    caption: 'Precast four-side wall structure with door and window provisions',
     badgeNum: '3',
     badgeTxt: 'Days to erect',
-    badgeSub: 'Foundation to roof',
-    lead: 'A precast ready-made shed pairs our factory-cast wall panels with a bolted steel roof truss and sheet covering — a complete enclosed structure raised on a concrete base in days. Built for storage, site offices, labour quarters and farm use.',
+    badgeSub: 'Four-side wall structure',
+    lead: 'A precast ready-made shed is a four-side enclosed structure built from our factory-cast wall panels, with openings and provisions for doors and windows fitted to your layout. We supply and erect the wall structure only — foundation and roofing are arranged separately by you or your contractor.',
     buildSteps: [
       ['Precast wall panels', 'The same reinforced posts and slab panels used in our compound walls form the shed body.'],
-      ['Steel roof truss', 'Bolted steel trusses span the structure and are covered with sheet roofing.'],
-      ['Doors, windows & vents', 'Ventilated wave-cut panels, barred windows and steel doors fitted to your layout.'],
+      ['Doors, windows & vents', 'Ventilated wave-cut panels, barred windows and steel door openings fitted to your layout.'],
+      ['Foundation & roof by you', 'We hand over the completed four-side structure — foundation and roofing are outside our scope and arranged by your own team or contractor.'],
     ],
     advantagesTitle: 'Why a precast shed works',
     advantages: SHED_ADVANTAGES,

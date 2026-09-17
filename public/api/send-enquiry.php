@@ -7,13 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-require __DIR__ . '/PHPMailer/src/Exception.php';
-require __DIR__ . '/PHPMailer/src/PHPMailer.php';
-require __DIR__ . '/PHPMailer/src/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
 $config = require __DIR__ . '/config.php';
 
 $input = json_decode(file_get_contents('php://input'), true) ?: [];
@@ -37,39 +30,30 @@ if ($name === '' || !preg_match('/^[0-9+\s-]{7,15}$/', $phone)) {
     exit;
 }
 
-$mail = new PHPMailer(true);
+$subject = '=?UTF-8?B?' . base64_encode('New enquiry — Naren Groups (' . $name . ')') . '?=';
 
-try {
-    $mail->isSMTP();
-    $mail->Host       = $config['smtp_host'];
-    $mail->SMTPAuth   = true;
-    $mail->Username   = $config['smtp_user'];
-    $mail->Password   = $config['smtp_pass'];
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = $config['smtp_port'];
+$body = '
+    <h2>New website enquiry</h2>
+    <p><strong>Name:</strong> ' . htmlspecialchars($name) . '</p>
+    <p><strong>Phone:</strong> ' . htmlspecialchars($phone) . '</p>
+    <p><strong>Location:</strong> ' . htmlspecialchars($location) . '</p>
+    <p><strong>Project type:</strong> ' . htmlspecialchars($type) . '</p>
+    <p><strong>Approx. length:</strong> ' . htmlspecialchars($length) . '</p>
+    <p><strong>Message:</strong><br>' . nl2br(htmlspecialchars($message)) . '</p>
+';
 
-    $mail->setFrom($config['smtp_user'], 'Naren Groups Website');
-    $mail->addAddress($config['to_email']);
+$headers = [
+    'MIME-Version: 1.0',
+    'Content-Type: text/html; charset=UTF-8',
+    'From: ' . $config['from_name'] . ' <' . $config['from_email'] . '>',
+    'Reply-To: ' . $config['from_email'],
+];
 
-    $mail->isHTML(true);
-    $mail->Subject = 'New enquiry — Naren Groups (' . $name . ')';
-    $mail->Body    = '
-        <h2>New website enquiry</h2>
-        <p><strong>Name:</strong> ' . htmlspecialchars($name) . '</p>
-        <p><strong>Phone:</strong> ' . htmlspecialchars($phone) . '</p>
-        <p><strong>Location:</strong> ' . htmlspecialchars($location) . '</p>
-        <p><strong>Project type:</strong> ' . htmlspecialchars($type) . '</p>
-        <p><strong>Approx. length:</strong> ' . htmlspecialchars($length) . '</p>
-        <p><strong>Message:</strong><br>' . nl2br(htmlspecialchars($message)) . '</p>
-    ';
-    $mail->AltBody = "New enquiry\nName: $name\nPhone: $phone\nLocation: $location\nProject type: $type\nLength: $length\nMessage: $message";
+$sent = mail($config['to_email'], $subject, $body, implode("\r\n", $headers));
 
-    $mail->send();
+if ($sent) {
     echo json_encode(['success' => true]);
-} catch (Exception $e) {
+} else {
     http_response_code(500);
-    echo json_encode(
-        ['success' => false, 'error' => 'Mail could not be sent', 'debug' => $mail->ErrorInfo, 'exception' => $e->getMessage()],
-        JSON_INVALID_UTF8_SUBSTITUTE
-    );
+    echo json_encode(['success' => false, 'error' => 'Mail could not be sent']);
 }

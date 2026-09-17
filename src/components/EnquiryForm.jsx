@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { WA_NUMBER } from '../data/site'
 
 export default function EnquiryForm() {
   const [error, setError] = useState('')
   const [status, setStatus] = useState('')
-  const enc = (v) => encodeURIComponent((v || '-').trim() || '-')
+  const [sending, setSending] = useState(false)
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     const f = e.target.elements
     const name = f.name.value.trim()
@@ -24,41 +23,32 @@ export default function EnquiryForm() {
       message: f.message.value.trim() || '-',
     }
 
-    // Fire-and-forget: awaiting here would delay window.open past the click's
-    // user-gesture window and get it blocked as a popup by most browsers.
-    const endpoint = `${import.meta.env.BASE_URL}api/send-enquiry.php`
-    console.log('[enquiry] sending to', endpoint, fields)
-    setStatus('Sending email…')
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(fields),
-    })
-      .then(async (res) => {
-        const body = await res.text()
-        console.log('[enquiry] response', res.status, body)
-        setStatus(res.ok ? 'Email sent ✓' : `Email failed (${res.status}): ${body}`)
+    setSending(true)
+    setStatus('')
+    try {
+      const res = await fetch(`${import.meta.env.BASE_URL}api/send-enquiry.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields),
       })
-      .catch((err) => {
-        console.error('[enquiry] fetch failed', err)
-        setStatus(`Email request failed: ${err.message}`)
-      })
-
-    const msg =
-      `New enquiry — Naren Groups%0A%0A` +
-      `Name: ${enc(fields.name)}%0A` +
-      `Phone: ${enc(fields.phone)}%0A` +
-      `Location: ${enc(fields.location)}%0A` +
-      `Project type: ${enc(fields.type)}%0A` +
-      `Length: ${enc(fields.length)}%0A` +
-      `Message: ${enc(fields.message)}`
-    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank', 'noopener')
+      if (res.ok) {
+        setStatus('Thanks! Your enquiry has been sent — we\'ll get back to you shortly.')
+        e.target.reset()
+      } else {
+        setStatus('Something went wrong sending your enquiry. Please call us instead.')
+      }
+    } catch (err) {
+      console.error('[enquiry] send failed', err)
+      setStatus('Something went wrong sending your enquiry. Please call us instead.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
     <form className="form" onSubmit={onSubmit} noValidate>
       <h3 className="form__title">Online Enquiry</h3>
-      <p className="form__note">Submitting opens WhatsApp with your details pre-filled.</p>
+      <p className="form__note">Fill in your details and we'll get back to you shortly.</p>
       <div className="form__row">
         <label className="field"><span>Name</span><input type="text" name="name" required placeholder="Your name" /></label>
         <label className="field"><span>Phone</span><input type="tel" name="phone" required placeholder="10-digit mobile" /></label>
@@ -77,7 +67,7 @@ export default function EnquiryForm() {
       </label>
       <label className="field"><span>Approx. running feet (optional)</span><input type="text" name="runLength" placeholder="e.g. 500 ft" /></label>
       <label className="field"><span>Message</span><textarea name="message" rows="3" placeholder="Tell us about your requirement" /></label>
-      <button type="submit" className="btn btn--red btn--block">Submit</button>
+      <button type="submit" className="btn btn--red btn--block" disabled={sending}>{sending ? 'Sending…' : 'Submit'}</button>
       <p className="form__error" role="alert">{error}</p>
       {status && <p style={{ marginTop: '.5rem', fontSize: '.85rem', color: '#ccc' }}>{status}</p>}
     </form>
