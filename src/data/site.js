@@ -93,7 +93,7 @@ export const ADVANTAGES = [
   { title: 'Superior durability', text: 'Controlled curing up to 25 days for lasting strength.' },
   { title: 'Cost-effective', text: 'Less labour, less waste, predictable pricing.' },
   { title: 'Low maintenance', text: 'Weather-resistant panels that stay put for years.' },
-  { title: 'Professional finish', text: 'Clean, uniform panels with an optional painted finish.' },
+  { title: 'Professional finish', text: 'Clean, uniform panels ' },
   { title: 'End-to-end service', text: 'Manufacturing, transport, installation & site support.' },
 ]
 
@@ -128,7 +128,7 @@ export const PROCESS = [
   { n: '01', title: 'Site visit & quote', text: 'We measure your site, understand the terrain and share a clear, itemised quotation.' },
   { n: '02', title: 'Precision casting', text: 'Panels and posts are cast at our nearest unit and cured up to 25 days for full strength.' },
   { n: '03', title: 'Transport & install', text: 'We deliver and assemble on site with trained crews — fast, clean and safe.' },
-  { n: '04', title: 'Proper finishing', text: 'Cement packing one pillars and slabs will be done and 2 inch rod will be provided for barbed wire fencing.' },
+  { n: '04', title: 'Proper finishing', text: 'Naren Groups will ensure every installation is completed with meticulous attention to detail, providing neat cement packing on the pillars and slabs for a clean, durable finish, along with 2-inch rods on the pillars for secure and reliable barbed wire fencing.' },
 ]
 
 export const PRODUCTS = [
@@ -147,7 +147,7 @@ export const PRODUCTS = [
     buildSteps: [
       ['Reinforced posts', 'Cast with steel reinforcement for structural strength and a secure fixing point.'],
       ['Stacked slab panels', 'Factory-cast, uniform panels that stack cleanly between posts.'],
-      ['Proper finishing', 'Cement packing one pillars and slabs will be done and 2 inch rod will be provided for barbed wire fencing.'],
+      ['Proper finishing', 'Naren Groups will ensure every installation is completed with meticulous attention to detail, providing neat cement packing on the pillars and slabs for a clean, durable finish, along with 2-inch rods on the pillars for secure and reliable barbed wire fencing.'],
     ],
     advantagesTitle: 'Why precast beats brick',
     advantages: ADVANTAGES,
